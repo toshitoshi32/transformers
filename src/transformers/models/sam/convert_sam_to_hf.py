@@ -24,7 +24,6 @@ import argparse
 import re
 
 import numpy as np
-import requests
 import torch
 from huggingface_hub import hf_hub_download
 from PIL import Image
@@ -36,6 +35,7 @@ from transformers import (
     SamProcessor,
     SamVisionConfig,
 )
+from security import safe_requests
 
 
 def get_config(model_name):
@@ -151,7 +151,7 @@ def convert_sam_checkpoint(model_name, checkpoint_path, pytorch_dump_folder, pus
     hf_model = hf_model.to(device)
 
     img_url = "https://huggingface.co/ybelkada/segment-anything/resolve/main/assets/car.png"
-    raw_image = Image.open(requests.get(img_url, stream=True).raw).convert("RGB")
+    raw_image = Image.open(safe_requests.get(img_url, stream=True).raw).convert("RGB")
 
     input_points = [[[500, 375]]]
     input_labels = [[1]]
