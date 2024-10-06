@@ -24,7 +24,6 @@ import importlib.metadata
 import inspect
 import math
 import os
-import random
 import re
 import shutil
 import sys
@@ -167,6 +166,7 @@ from .utils import (
     strtobool,
 )
 from .utils.quantization_config import QuantizationMethod
+import secrets
 
 
 DEFAULT_CALLBACKS = [DefaultFlowCallback]
@@ -2820,7 +2820,7 @@ class Trainer:
                 return
 
         checkpoint_rng_state = torch.load(rng_file)
-        random.setstate(checkpoint_rng_state["python"])
+        secrets.SystemRandom().setstate(checkpoint_rng_state["python"])
         np.random.set_state(checkpoint_rng_state["numpy"])
         torch.random.set_rng_state(checkpoint_rng_state["cpu"])
         if torch.cuda.is_available():
@@ -2920,7 +2920,7 @@ class Trainer:
     def _save_rng_state(self, output_dir):
         # Save RNG state in non-distributed training
         rng_states = {
-            "python": random.getstate(),
+            "python": secrets.SystemRandom().getstate(),
             "numpy": np.random.get_state(),
             "cpu": torch.random.get_rng_state(),
         }
