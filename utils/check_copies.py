@@ -45,6 +45,7 @@ from collections import OrderedDict
 from typing import List, Optional, Tuple, Union
 
 from transformers.utils import direct_transformers_import
+from security import safe_command
 
 
 # All paths are set with the intent you should run this script from the root of the repo with the command
@@ -564,7 +565,7 @@ def run_ruff(code, check=False):
         command = ["ruff", "check", "-", "--fix", "--exit-zero"]
     else:
         command = ["ruff", "format", "-", "--config", "pyproject.toml", "--silent"]
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    process = safe_command.run(subprocess.Popen, command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     stdout, _ = process.communicate(input=code.encode())
     return stdout.decode()
 
