@@ -17,7 +17,6 @@
 import copy
 import inspect
 import math
-import random
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
@@ -47,6 +46,7 @@ from ...utils import (
 from ..auto.configuration_auto import AutoConfig
 from ..auto.modeling_auto import AutoModel, AutoModelForTextEncoding
 from .configuration_musicgen_melody import MusicgenMelodyConfig, MusicgenMelodyDecoderConfig
+import secrets
 
 
 if is_flash_attn_2_available():
@@ -1098,7 +1098,7 @@ class MusicgenMelodyDecoder(MusicgenMelodyPreTrainedModel):
             # add LayerDrop (see https://arxiv.org/abs/1909.11556 for description)
             if output_hidden_states:
                 all_hidden_states += (hidden_states,)
-            dropout_probability = random.uniform(0, 1)
+            dropout_probability = secrets.SystemRandom().uniform(0, 1)
             if self.training and (dropout_probability < self.layerdrop):
                 continue
 
