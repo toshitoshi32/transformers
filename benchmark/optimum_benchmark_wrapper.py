@@ -1,9 +1,10 @@
 import argparse
 import subprocess
+from security import safe_command
 
 
 def main(config_dir, config_name, args):
-    subprocess.run(["optimum-benchmark", "--config-dir", f"{config_dir}", "--config-name", f"{config_name}"] + ["hydra/job_logging=disabled", "hydra/hydra_logging=disabled"] + args)
+    safe_command.run(subprocess.run, ["optimum-benchmark", "--config-dir", f"{config_dir}", "--config-name", f"{config_name}"] + ["hydra/job_logging=disabled", "hydra/hydra_logging=disabled"] + args)
 
 
 if __name__ == "__main__":
