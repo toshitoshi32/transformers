@@ -29,7 +29,7 @@ logger = logging.get_logger(__name__)
 def get_last_stable_minor_release():
     # Get the last stable release of transformers
     url = "https://pypi.org/pypi/transformers/json"
-    release_data = requests.get(url).json()
+    release_data = requests.get(url, timeout=60).json()
 
     # Find the last stable release of of transformers (version below current version)
     major_version, minor_version, patch_version, _ = current_version.split(".")
